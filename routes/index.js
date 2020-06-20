@@ -1,13 +1,18 @@
-var express = require('express');
+var express = require("express");
 var router = express.Router();
-const userController = require("../components/users/controllers");
+const UserController = require("../components/users/controllers");
+const BlockchainController = require("../components/blockchains/controllers");
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Blockchain based voting system' });
+router.get("/", function (req, res, next) {
+  res.render("index", { title: "Blockchain based voting system" });
 });
 
-router.post("/sign-in", userController.signIn);
-router.post("/sign-up", userController.signUp);
+router.post("/sign-in", UserController.signIn);
+router.post("/sign-up", UserController.signUp);
+router.post("/add-vote", BlockchainController.addVote);
+router.get("/pending-votes", BlockchainController.getPendingVotes);
+router.post("/confirm-votes", BlockchainController.addBlock);
+router.post("/update", BlockchainController.updateChain);
 
 module.exports = router;
