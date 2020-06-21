@@ -2,14 +2,14 @@ const VoteChain = require("../../../utils/blockchain");
 const Vote = require("../../votes/models");
 const socketIOClient = require("socket.io-client");
 const ENDPOINT = "http://127.0.0.1:3000";
+const socket = socketIOClient(ENDPOINT);
+
 
 exports.addVote = async (req, res, next) => {
   const { info, voteTo } = req.body;
   try {
     const newVote = new Vote(info, voteTo);
     await VoteChain.addVote(newVote);
-    const socket = socketIOClient(ENDPOINT);
-    socket.emit("VOTE", newVote);
     return res.json({
       message: "Succeed",
       result: true,
@@ -63,6 +63,8 @@ exports.addBlock = async (req, res, next) => {
     VoteChain.addPendingVotes(publicKey);
     // Call server to clear all pending votes
     // ...
+    socket.emit('NEW BLOCK');
+    //server socket to all client
 
     return res.json({
       message: "Succeed",
