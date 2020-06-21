@@ -12,6 +12,7 @@ router.post("/sign-in", UserController.signIn);
 router.post("/sign-up", UserController.signUp);
 router.post("/add-vote", BlockchainController.addVote);
 router.get("/pending-votes", BlockchainController.getPendingVotes);
+router.get("/all-votes", BlockchainController.getAllVotes);
 router.post("/confirm-votes", BlockchainController.addBlock);
 router.post("/update", BlockchainController.updateChain);
 
