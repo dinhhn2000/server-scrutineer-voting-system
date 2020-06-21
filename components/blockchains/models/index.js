@@ -33,11 +33,7 @@ module.exports = class BlockChain {
   }
 
   getPendingVotes() {
-    let votes = [];
-    for (const v of this.pendingVotes) {
-      votes.push(v);
-    }
-    return votes;
+    return this.pendingVotes;
   }
 
   getAllVotes() {
@@ -53,7 +49,7 @@ module.exports = class BlockChain {
   isValidChain() {
     if (JSON.stringify(this.chain[0]) !== JSON.stringify(this.getGenesisBlock())) return false;
     for (let i = 1; i < this.chain.length - 1; i++) {
-      const currentBlock =  this.chain[i];
+      const currentBlock = this.chain[i];
       const previousBlock = this.chain[i - 1];
 
       if (!currentBlock.hasValidVotes()) return false;

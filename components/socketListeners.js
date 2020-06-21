@@ -4,34 +4,36 @@ const room = "_room";
 var sockets = [];
 const socketListeners = (io) => {
   io.on("connection", (socket) => {
-    console.log("id socket join " + socket.id);
+    // console.log("id socket join " + socket.id);
     sockets.push(socket.id);
     socket.join(room);
-    console.log(sockets);
-    socket.emit("CONNECT", { sockets });
-    io.to(room).emit("hi");
+    // console.log(sockets);
+    socket.emit('CONNECT', {sockets});
+    io.to(room).emit('hi');
 
-    socket.on("CL REQUEST CHAIN", () => {
-      const r = getRandomInt(0, blockchain.getLength());
-      socket.broadcast.to(sockets[r]).emit("SV REQUEST CHAIN", idSocket);
-    });
-    socket.on("CL SEND CHAIN", (idSocket, blockchain) => {
-      socket.broadcast.to(idSocket).emit("SV SEND CHAIN", blockchain);
-    });
 
-    socket.on("NEW BLOCK", () => {
+    socket.on('CL REQUEST CHAIN',()=>{
+      const r = getRandomInt(0,BlockChain.getLength());
+      socket.broadcast.to(sockets[r]).emit('SV REQUEST CHAIN',{idSocket:socket.id});
+      socket.emit('SV SEND TEMP CHAIN',BlockChain);
+    })
+    socket.on('CL SEND CHAIN', (idSocket,blockchain)=>{
+      socket.broadcast.to(idSocket).emit('SV SEND CHAIN',blockchain);
+    })
+
+    socket.on('NEW BLOCK',() => {
       const block = BlockChain.getLastedBlock();
       io.to(room).emit("NEW BLOCK", block);
     });
 
     socket.on("COMPARE LATEST BLOCK", (block) => {
-      console.log(block);
-      console.log("compare");
+      // console.log(block);
+      // console.log("compare");
       io.to(room).emit("COMPARE LATEST BLOCK", { idSocket: socket.id, block });
     });
 
     socket.on("RESULT COMPARE LATEST BLOCK", (idSocket, result) => {
-      console.log("RESULT COMPARE LATEST BLOCK");
+      // console.log("RESULT COMPARE LATEST BLOCK");
       io.to(idSocket).emit("RESULT COMPARE LATEST BLOCK", { idSocket, result });
     });
 
