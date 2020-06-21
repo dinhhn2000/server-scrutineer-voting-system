@@ -14,13 +14,13 @@ const socketListeners = (io) => {
 
 
     socket.on('CL REQUEST CHAIN',()=>{
-      const r = getRandomInt(0,blockchain.getLength());
-      socket.broadcast.to(sockets[r]).emit('SV REQUEST CHAIN',idSocket);
+      const r = getRandomInt(0,BlockChain.getLength());
+      socket.broadcast.to(sockets[r]).emit('SV REQUEST CHAIN',{idSocket:socket.id});
+      socket.emit('SV SEND TEMP CHAIN',BlockChain);
     })
     socket.on('CL SEND CHAIN', (idSocket,blockchain)=>{
       socket.broadcast.to(idSocket).emit('SV SEND CHAIN',blockchain);
     })
-
 
     socket.on('NEW BLOCK',() => {
       const block = BlockChain.getLastedBlock();
